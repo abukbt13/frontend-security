@@ -11,7 +11,7 @@ document.title = "home";
 <template>
   <div class="main bg-primary px-4">
     <Header />
-    <div class="row">
+    <div class="row mt-3">
       <div class="col-sm-12 col-md-6 col-lg-6  d-flex flex-column justify-content-center">
         <h2 class="text-center text-white">
           Your top software guard
