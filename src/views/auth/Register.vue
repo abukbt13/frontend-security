@@ -6,6 +6,7 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 
 import {auth} from "@/compossables/auth";
+import Header from "@/views/includes/Header.vue";
 const {base_url} = auth()
 
 const email = ref('')
@@ -46,6 +47,7 @@ const createAccount =async () => {
 </script>
 
 <template>
+ <Header />
   <section class="vh-100">
     <div class="row px-3 d-flex justify-content-center align-items-center h-100">
 
@@ -69,6 +71,9 @@ const createAccount =async () => {
           <div class="">
             <button type="submit" class="w-100 btn btn-primary btn-block">Register</button>
           </div>
+          <br>
+          <p>Don't have an account? <router-link to="login">Click here</router-link></p>
+
         </form>
       </div>
 

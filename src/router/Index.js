@@ -3,6 +3,7 @@ import Index from '../views/index.vue'
 import Login from '../views/auth/Login.vue'
 import Register from '../views/auth/Register.vue'
 import User from "@/views/dashboard/user/User.vue";
+import View_evidence from "@/views/dashboard/user/View_evidence.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/dashboard/user',
       component : User
     },
+    {
+      path: '/dashboard/user/view_evidence/:case_id/:secret_key',
+      component: View_evidence
+    }
+
 
   ]
 })
