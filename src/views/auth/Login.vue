@@ -51,7 +51,7 @@ const login =async () => {
         <form @submit.prevent="login">
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Email address</label>
-            <input type="email" class="form-control" v-model="email" placeholder="name@example.com">
+            <input type="email" class="form-control" v-model="email" placeholder="Enter your email here">
           </div>
           <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Password</label>
@@ -62,7 +62,6 @@ const login =async () => {
             <button type="submit" class="w-100 btn btn-primary btn-block">Login</button>
           </div>
           <br>
-          <p>Don't have an account? <router-link to="register">Create account here</router-link></p>
         </form>
       </div>
 
