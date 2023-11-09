@@ -21,7 +21,7 @@ onMounted(()=>{
 
 <template>
   <Header />
-  <table class="table border table-hover table-bordered">
+  <table style="position:absolute;min-width: 100vh;max-width: 100vw;" class="table border table-hover table-bordered">
     <tr>
       <th class="border">#</th>
       <th class="border">Email</th>

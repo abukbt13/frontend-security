@@ -27,7 +27,7 @@ const createAccount =async () => {
     if(res.status === 200){
       if(res.data.status === 'success'){
         localStorage.setItem('token', res.data.token)
-        await router.push('/dashboard/user')
+        await router.push('/dashboard/admin')
       }
       else{
         regerror.value = res.data.message

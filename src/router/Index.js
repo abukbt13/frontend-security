@@ -2,10 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/index.vue'
 import Login from '../views/auth/Login.vue'
 import Register from '../views/auth/Register.vue'
-import User from "@/views/dashboard/user/User.vue";
-import View_evidence from "@/views/dashboard/user/View_evidence.vue";
-import Admin from "@/views/dashboard/admin/admin.vue";
-import Show_admin from "@/views/dashboard/admin/Show_admin.vue";
+import User from "@/views/dashboard/admin/User.vue";
+import View_evidence from "@/views/dashboard/admin/View_evidence.vue";
+import Case_details from "@/views/dashboard/admin/Case_details.vue";
+import Admin from "@/views/dashboard/super_admin/admin.vue";
+import Show_admin from "@/views/dashboard/super_admin/Show_admin.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,19 +25,23 @@ const router = createRouter({
       component : Register
     },
     {
-      path: '/dashboard/user',
+      path: '/dashboard/admin',
       component : User
     },
     {
-      path: '/dashboard/admin',
+      path: '/dashboard/super_admin',
       component : Admin
     },
     {
-      path: '/dashboard/admin/show_admin',
+      path: '/dashboard/super_admin/case_details/:case_id/:secret_key',
+      component : Case_details
+    },
+    {
+      path: '/dashboard/super_admin/show_admin',
       component : Show_admin
     },
     {
-      path: '/dashboard/user/view_evidence/:case_id/:secret_key',
+      path: '/dashboard/admin/view_evidence/:case_id/:secret_key',
       component: View_evidence
     }
 
