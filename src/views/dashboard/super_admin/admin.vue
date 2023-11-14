@@ -7,7 +7,6 @@ import {onMounted, ref} from "vue";
 import axios from "axios";
 
 import {auth} from "@/compossables/auth";
-import router from "@/router";
 const {authUser,authHeader,base_url,storage} = auth()
 const email = ref('')
 const password = ref('')
@@ -53,12 +52,12 @@ onMounted(()=>{
   <div class="head-section">
     <Header />
   </div>
-  <div class="d-flex ">
-    <div class="px-5 bg-light py-4">
+  <div class="row">
+    <div class="px-5 col col-sm-12 col-md-6 col-lg-6 bg-light py-4">
       <span class="">ADMIN DASHBOARD</span> <hr>
       <span class=""><i  style="color: seagreen;padding: 4px;"  class="bi bi-pen-fill"></i>Users</span>
       <li data-bs-toggle="modal" data-bs-target="#add_admin" class="list-unstyled text-primary"><i class="bi  bi-plus"></i>Add cryptanalyst</li>
-      <router-link to="show_admin"><i class="bi  bi-plus"></i> Show Cryptoanalyst</router-link>
+      <router-link to="super_admin/show_admin"><i class="bi  bi-plus"></i> Show Cryptoanalyst</router-link>
       <hr>
 
 
@@ -95,7 +94,7 @@ onMounted(()=>{
       </div>
     </div>
 
-    <div class="">
+    <div class="col col-sm-12 col-md-6 col-lg-6">
 
 
       <table class="table border table-hover table-bordered">

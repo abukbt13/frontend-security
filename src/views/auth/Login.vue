@@ -24,7 +24,16 @@ const login =async () => {
   if(res.status=== 200) {
     if (res.data.status === 'success') {
       localStorage.setItem('token', res.data.token);
-      await router.push('/');
+      if(res.data.user.role === 'super_admin'){
+        await router.push('/dashboard/super_admin/');
+        // alert('admin')
+      }
+      else{
+        await router.push('dashboard/admin/');
+        // alert('Not found')
+      }
+
+      // await router.push('/');
     }
     else if(res.data.status === 'failed') {
       regerror.value = res.data.message;

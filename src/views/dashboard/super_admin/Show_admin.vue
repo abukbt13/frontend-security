@@ -32,6 +32,7 @@ onMounted(()=>{
       <td class="border">{{ admin.email }}</td>
       <td class="border">{{ admin.created_at }}</td>
       <td><button @click="secretKeyGen(cases.id)" data-bs-toggle="modal" data-bs-target="#secret" class="btn m-2 bg-primary btn-primary">View</button></td>
+      <td><button @click="secretKeyGen(cases.id)" data-bs-toggle="modal" data-bs-target="#secret" class="btn m-2 bg-primary btn-primary">Check  operation</button></td>
     </tr>
   </table>
 </template>

@@ -27,6 +27,7 @@ const plaintiff_id = ref('')
 const type_of_case = ref('')
 const case_status_id = ref('')
 const status_type = ref('')
+const description = ref('')
 
 
 
@@ -39,6 +40,7 @@ const editCase = ($cases) =>{
   plaintiff_name.value=$cases.plaintiff_name
   plaintiff_id.value=$cases.plaintiff_id
   type_of_case.value=$cases.type_of_case
+  description.value=$cases.description
 
 }
 function clearFields(){
@@ -50,6 +52,7 @@ function clearFields(){
   defendant_name.value=''
   case_name.value=''
   type_of_case.value=''
+  description.value=''
 }
 const addCase =async () => {
 
@@ -60,6 +63,7 @@ const addCase =async () => {
   formData.append('defendant_id', defendant_id.value)
   formData.append('defendant_name', defendant_name.value)
   formData.append('type_of_case', type_of_case.value)
+  formData.append('description', description.value)
   formData.append('key', key.value)
   if(edit_id.value!=''){
     const res = await axios.post(base_url.value+'court/edit/'+edit_id.value,formData)
@@ -88,7 +92,7 @@ const addCase =async () => {
 
 }
 const getCases = async () =>{
-  const res = await axios.get(base_url.value+'court/show')
+  const res = await axios.get(base_url.value+'court/show',authHeader)
   case_date.value = res.data.cases
 }
 const changeStatus = async ($case_id) =>{
@@ -109,11 +113,7 @@ const changeCaseStatus =async () => {
 function  secretKeyGen($id){
   case_id.value=$id
 }
-const getSingleCases =async () => {
-  await router.push('/dashboard/super_admin/case_details/' + case_id.value + '/' + secret.value)
-  const res = await axios.get(base_url.value+'case/single/'+case_id.value+'/'+secret.value)
-  console.log(res)
-}
+
 onMounted(()=>{
   getCases()
 })
@@ -123,8 +123,8 @@ onMounted(()=>{
   <div class="head-section">
     <Header />
   </div>
-<div class="d-flex ">
-  <div class="px-5 bg-light py-4">
+<div class="row ">
+  <div class="px-5 col-sm-12 col-md-6 col-lg-6 bg-light py-4">
     <span class=""><i  class="bi bi-grid"></i>DASHBOARD</span> <hr>
     <span class=""><i  style="color: seagreen;padding: 4px;"  class="bi bi-pen-fill"></i>CASES</span>
     <li data-bs-toggle="modal" data-bs-target="#add_case" @click="clearFields" class="list-unstyled text-primary"><i class="bi  bi-plus"></i>Add Case</li>
@@ -181,6 +181,10 @@ onMounted(()=>{
                 <label for="exampleFormControlInput1" class="form-label">Type of Case</label>
                 <input type="text" class="form-control" v-model="type_of_case">
               </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Description</label>
+                <input type="text" class="form-control" v-model="description">
+              </div>
               <div class="">
                 <button v-if="edit_id" type="submit" data-bs-dismiss="modal" class="float-end  btn btn-primary btn-block">Update</button>
                 <button v-else type="submit" data-bs-dismiss="modal" class="float-end  btn btn-primary btn-block">Add</button>
@@ -195,7 +199,7 @@ onMounted(()=>{
 
   </div>
 
-  <div class="">
+  <div class="col col-sm-12 col-md-6 col-lg-6">
 
     <table class="table m-2 border table-hover table-bordered table-responsive">
       <tr>
@@ -214,9 +218,9 @@ onMounted(()=>{
           <td class="border">{{ cases.plaintiff_name }}</td>
           <td class="border">{{ cases.defendant_name }}</td>
           <td>
-           <button class="btn m-2 bg-primary" @click="editCase(cases)"  data-bs-toggle="modal" data-bs-target="#add_case">Edit</button>
-           <button class="btn m-2 bg-primary" @click="changeStatus(cases.id)" data-bs-toggle="modal" data-bs-target="#status">Update status</button>
-           <button class="btn m-2 bg-primary" @click="secretKeyGen(cases.id)" data-bs-toggle="modal" data-bs-target="#secret">More details</button>
+<!--           <button class="btn m-2 bg-primary" @click="editCase(cases)"  data-bs-toggle="modal" data-bs-target="#add_case">Edit</button>-->
+<!--           <button class="btn m-2 bg-primary" @click="changeStatus(cases.id)" data-bs-toggle="modal" data-bs-target="#status">Update status</button>-->
+            <router-link :to="`case_details/${cases.id}`" class="btn m-2 bg-primary">More details</router-link>
           </td>
         </tr>
     </table>
@@ -226,30 +230,6 @@ onMounted(()=>{
 
 
   <!-- Modal -->
-  <div class="modal fade" id="secret" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-
-        <div class="modal-body">
-          <form @submit.prevent="getSingleCases">
-
-            <div class="mb-3">
-              <div class="d-flex justify-content-between">
-                <label for="exampleFormControlInput1" class="form-label">ENTER SECRET KEY</label>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-              </div>
-              <input type="text" class="form-control" v-model="secret">
-            </div>
-            <div class="">
-              <button type="submit"  class="float-end me-5 btn btn-primary btn-block">CONTINUE</button>
-            </div>
-          </form>
-        </div>
-
-      </div>
-    </div>
-  </div>
   <div class="modal fade" id="status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
 

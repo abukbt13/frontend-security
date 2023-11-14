@@ -13,7 +13,6 @@ export function auth(){
     const   authUser = async () => {
         try {
             const res= await axios.get(base_url.value+'auth/user', authHeader);
-
         } catch (error) {
             window.location.href = '/login';
         }

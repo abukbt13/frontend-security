@@ -33,7 +33,7 @@ const router = createRouter({
       component : Admin
     },
     {
-      path: '/dashboard/super_admin/case_details/:case_id/:secret_key',
+      path: '/dashboard/admin/case_details/:case_id/',
       component : Case_details
     },
     {
