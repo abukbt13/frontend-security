@@ -52,69 +52,76 @@ onMounted(()=>{
   <div class="head-section">
     <Header />
   </div>
-  <div class="row">
-    <div class="px-5 col col-sm-12 col-md-6 col-lg-6 bg-light py-4">
-      <span class="">ADMIN DASHBOARD</span> <hr>
-      <span class=""><i  style="color: seagreen;padding: 4px;"  class="bi bi-pen-fill"></i>Users</span>
-      <li data-bs-toggle="modal" data-bs-target="#add_admin" class="list-unstyled text-primary"><i class="bi  bi-plus"></i>Add cryptanalyst</li>
-      <router-link to="super_admin/show_admin"><i class="bi  bi-plus"></i> Show Cryptoanalyst</router-link>
-      <hr>
+  <div  class="mx-4">
 
 
-      <!-- Button trigger modal -->
+      <div class="">
 
 
-      <!-- Modal -->
-      <div class="modal fade" id="add_admin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">Create New Admin</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal fade" id="add_admin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">Create New Admin</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form @submit.prevent="createAdmin">
+
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Email</label>
+                    <input type="email"  class="form-control" v-model="email">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Password</label>
+                    <input type="password" class="form-control" v-model="password">
+                  </div>
+                  <div class="">
+                    <button type="submit"  class="float-end  btn btn-primary btn-block">Create Admin</button>
+                  </div>
+                </form>
+              </div>
+
             </div>
-            <div class="modal-body">
-              <form @submit.prevent="createAdmin">
-
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Email</label>
-                  <input type="email"  class="form-control" v-model="email">
-                </div>
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Password</label>
-                  <input type="password" class="form-control" v-model="password">
-                </div>
-                <div class="">
-                  <button type="submit"  class="float-end  btn btn-primary btn-block">Create Admin</button>
-                </div>
-              </form>
-            </div>
-
           </div>
         </div>
       </div>
+
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Enable body scrolling</button>
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <span class="">ADMIN DASHBOARD</span> <hr>
+        <span class=""><i  style="color: seagreen;padding: 4px;"  class="bi bi-pen-fill"></i>Users</span>
+        <li data-bs-toggle="modal" data-bs-target="#add_admin" class="list-unstyled text-primary"><i class="bi  bi-plus"></i>Add cryptanalyst</li>
+        <router-link to="super_admin/show_admin"><i class="bi  bi-plus"></i> Show Cryptoanalyst</router-link>
+        <hr>
+      </div>
     </div>
+        <table  class="table table-responsive border table-hover table-bordered">
+          <tr>
+            <th class="border">#</th>
+            <th class="border">Title</th>
+<!--            <th class="border">Details</th>-->
+            <th class="border">Platform</th>
+            <th class="border">Operation</th>
+          </tr>
+          <tr v-for="log in logs" :key="log">
+            <td class="border">{{ log.id }}</td>
+            <td class="border">{{ log.title }}</td>
+<!--            <td class="border">{{ log.details }}</td>-->
+            <td class="border">{{ log.platform }}</td>
+            <td><button @click="secretKeyGen(cases.id)" data-bs-toggle="modal" data-bs-target="#secret" class="btn m-2 bg-primary btn-primary">View</button></td>
+          </tr>
+        </table>
 
-    <div class="col col-sm-12 col-md-6 col-lg-6">
-
-
-      <table class="table border table-hover table-bordered">
-        <tr>
-          <th class="border">#</th>
-          <th class="border">Title</th>
-          <th class="border">Details</th>
-          <th class="border">Platform</th>
-          <th class="border">Operation</th>
-        </tr>
-        <tr v-for="log in logs" :key="log">
-          <td class="border">{{ log.id }}</td>
-          <td class="border">{{ log.title }}</td>
-          <td class="border">{{ log.details }}</td>
-          <td class="border">{{ log.platform }}</td>
-          <td><button @click="secretKeyGen(cases.id)" data-bs-toggle="modal" data-bs-target="#secret" class="btn m-2 bg-primary btn-primary">View</button></td>
-        </tr>
-      </table>
-    </div>
   </div>
+
   <!-- Button trigger modal -->
 
 
@@ -149,16 +156,9 @@ onMounted(()=>{
 
 
 <style scoped>
-.content{
-  padding: 4px;
-  border: 1px solid grey;
-  width: 15rem;
+table{
+  background-color: yellow;
+  width: 35rem;
 }
-.content-in{
-  padding: 4px;
-  border: 1px solid grey;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-}
+
 </style>
