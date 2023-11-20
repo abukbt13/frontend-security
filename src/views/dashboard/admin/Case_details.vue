@@ -15,8 +15,10 @@ const view = ref('');
 
 const picture = ref('');
 const description = ref('');
+const document = ref('');
 const all_pictures = ref([]);
 const all_docs = ref([]);
+const all_videos = ref([]);
 
 const evidences = ref([]);
 
@@ -26,6 +28,7 @@ const case_id = route.params.case_id
 function pictureUpload(e){
   picture.value=e.target.files[0];
 }
+
 
 const  getPicture = async () => {
   const res = await axios.get(base_url.value + 'evidence/picture/show', authHeader)
@@ -44,6 +47,7 @@ const  getSingleCases = async () => {
     }
     else {
       await getPicture()
+      await getDocument()
       view.value = 'true'
       evidences.value =res.data.data
       enter_secret.value = false
@@ -70,6 +74,36 @@ const addPicture =async () => {
   //   await getCases()
   // }
 
+
+}
+
+function documentUpload(e){
+  document.value=e.target.files[0];
+}
+const addDocument =async () => {
+  alert('')
+  const formData = new FormData();
+  formData.append('document', document.value)
+  formData.append('description', description.value)
+
+  const res = await axios.post(base_url.value+'document/add',formData,authHeader)
+  if(res.status === 200) {
+    alert('success')
+  }
+  // if(res.data.status === 'success'){
+  //   alert('Successfully Update')
+  //   clearFields()
+  //   await getCases()
+  // }
+
+
+}
+
+const  getDocument = async () => {
+  const res = await axios.get(base_url.value + 'document/show', authHeader)
+  if(res){
+    all_docs.value = res.data.documents
+  }
 
 }
 
@@ -110,28 +144,68 @@ const addPicture =async () => {
     </div>
     <div class="col col-sm-12 col-md-6 col-lg-6">
         <h2>Saved Evidences</h2>
-     <p>Videos Evidences</p>
+
+      <p>Video Evidences</p>
       <table class="table table-bordered border">
-            <thead>
+        <thead>
+        <tr>
+          <th colspan="4">Video evidence
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addVideo">
+              Add Video evidence
+            </button>
+
+            <!-- Modal -->
+          </th>
+        </tr>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
+          <th scope="col">Picture</th>
+          <th scope="col">Description</th>
+          <th scope="col">Operation</th>
         </tr>
         </thead>
         <tbody>
-            <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
+        <tr v-for="videos in all_videos" :key="videos">
+          <td>{{videos.id}}</td>
+          <td>{{videos.picture}}</td>
+          <td>{{videos.description}}</td>
           <td><button class="btn btn-primary">View</button></td>
         </tr>
+
         </tbody>
       </table>
+
+      <div class="modal fade" id="addVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add Video evidence</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form @submit.prevent="addPicture">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">Description</label>
+                  <textarea v-model="description" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">Picture</label>
+                  <input type="file" @change="pictureUpload" class="form-control" >
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Video</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
       <hr>
 
-      <p>Pictures Evidences</p>
+
+      <p>Picture Evidences</p>
       <table class="table table-bordered border">
         <thead>
         <tr>
@@ -172,7 +246,7 @@ const addPicture =async () => {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form @submit.prevent="addPicture">
-            <div class="modal-body">
+              <div class="modal-body">
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Description</label>
                   <textarea v-model="description" class="form-control" rows="5"></textarea>
@@ -181,22 +255,23 @@ const addPicture =async () => {
                   <label for="exampleFormControlInput1" class="form-label">Picture</label>
                   <input type="file" @change="pictureUpload" class="form-control" >
                 </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Add Evidence</button>
-            </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Evidence</button>
+              </div>
             </form>
           </div>
         </div>
       </div>
       <hr>
 
+
       <p>Document Evidences</p>
       <table class="table table-bordered border">
         <thead>
         <tr>
-          <th colspan="4">Picture evidence
+          <th colspan="4">Document evidence
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addDocument">
               Add document evidence
@@ -213,15 +288,13 @@ const addPicture =async () => {
         </tr>
         </thead>
         <tbody>
-        <tr v-if="all_docs" v-for="docs in all_docs" :key="docs">
+        <tr  v-for="docs in all_docs" :key="docs">
           <td>{{docs.id}}</td>
-          <td>{{docs.picture}}</td>
+          <td>{{docs.document}}</td>
           <td>{{docs.description}}</td>
           <td><button class="btn btn-primary">View</button></td>
         </tr>
-        <tr v-else>
-          <th colspan="4"><h1>No Documents saved</h1></th>
-        </tr>
+
         </tbody>
       </table>
 
