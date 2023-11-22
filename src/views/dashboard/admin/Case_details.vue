@@ -106,7 +106,9 @@ const  getDocument = async () => {
   }
 
 }
-
+onMounted(()=>{
+  authUser()
+})
 
 </script>
 

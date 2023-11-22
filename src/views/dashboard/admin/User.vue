@@ -66,7 +66,7 @@ const addCase =async () => {
   formData.append('description', description.value)
   formData.append('key', key.value)
   if(edit_id.value!=''){
-    const res = await axios.post(base_url.value+'court/edit/'+edit_id.value,formData)
+    const res = await axios.post(base_url.value+'court/edit/'+edit_id.value,formData,authHeader)
     if(res.status === 200) {
       if(res.data.status === 'success'){
         alert('Successfully Update')
@@ -77,7 +77,7 @@ const addCase =async () => {
     }
   }
   else {
-    const res = await axios.post(base_url.value+'court/create',formData)
+    const res = await axios.post(base_url.value+'court/create',formData,authHeader)
     if(res.status === 200) {
       if(res.data.status === 'success'){
         alert('Successfully saved')
@@ -123,84 +123,79 @@ onMounted(()=>{
   <div class="head-section">
     <Header />
   </div>
-<div class="row ">
-  <div class="px-5 col-sm-12 col-md-6 col-lg-6 bg-light py-4">
-    <span class=""><i  class="bi bi-grid"></i>DASHBOARD</span> <hr>
-    <span class=""><i  style="color: seagreen;padding: 4px;"  class="bi bi-pen-fill"></i>CASES</span>
-    <li data-bs-toggle="modal" data-bs-target="#add_case" @click="clearFields" class="list-unstyled text-primary"><i class="bi  bi-plus"></i>Add Case</li>
-    <li class="list-unstyled text-primary"><i class="bi bi-plus"></i>View Cases</li>
-    <li class="list-unstyled text-primary"><i class="bi bi-plus"></i>{{ add_success }}</li>
-    <hr>
 
-
-    <!-- Button trigger modal -->
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="add_case" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 v-if="edit_id" class="modal-title text-primary fs-5" id="staticBackdropLabel">Edit case</h1>
-            <h1 v-else class="modal-title text-primary fs-5" id="staticBackdropLabel">Add Case</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="addCase">
-
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Secret Key</label>
-                <input type="text" class="form-control" v-model="key">
-              </div>
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Case</label>
-                <input type="text" class="form-control" v-model="case_name">
-              </div>
-              <div class="row">
-
-                <div class="col">
-                  <div class="mb-3">
-                    <p class="text-primary">Plaintiff details</p>
-                    <label for="">Full Name</label>
-                    <input type="text" class="form-control" v-model="plaintiff_name">
-                    <label for="">Id Number</label>
-                    <input type="number" class="form-control" v-model="plaintiff_id">
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="mb-3">
-                    <p class="text-primary">Defendant details</p>
-                    <label for="">Full Name</label>
-                    <input type="text" class="form-control" v-model="defendant_name">
-                    <label for="">Id Number</label>
-                    <input type="number" class="form-control" v-model="defendant_id">
-                  </div>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Type of Case</label>
-                <input type="text" class="form-control" v-model="type_of_case">
-              </div>
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Description</label>
-                <input type="text" class="form-control" v-model="description">
-              </div>
-              <div class="">
-                <button v-if="edit_id" type="submit" data-bs-dismiss="modal" class="float-end  btn btn-primary btn-block">Update</button>
-                <button v-else type="submit" data-bs-dismiss="modal" class="float-end  btn btn-primary btn-block">Add</button>
-              </div>
-            </form>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
+<div class="d-flex">
+  <div class="sidebar px-4 pt-4">
+    <h2 style="border-bottom: 2px solid darkblue;" class="text-uppercase text-primary"><i  class="bi bi-grid"></i>Dashboard</h2>
+    <h5 class=""><i  style="color: seagreen;padding: 4px;"  class="bi bi-pen-fill"></i>CASES</h5>
+    <li style="font-size: 24px;" class="border my-1 list-unstyled text-primary" data-bs-toggle="modal" data-bs-target="#add_case" @click="clearFields" ><i class="bi  bi-plus"></i>Add Case</li>
+    <li style="font-size: 24px;" class="border my-1 list-unstyled text-primary" data-bs-toggle="modal" data-bs-target="#add_case" @click="clearFields" ><i class="bi  bi-activity"></i>Active Cases</li>
+    <li style="font-size: 24px;" class="border my-1 list-unstyled text-primary" data-bs-toggle="modal" data-bs-target="#add_case" @click="clearFields" ><i class="bi  bi-activity"></i>Inactive Cases</li>
   </div>
 
-  <div class="col col-sm-12 col-md-6 col-lg-6">
+  <!-- Modal for adding a case -->
+  <div class="modal fade" id="add_case" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 v-if="edit_id" class="modal-title text-primary fs-5" id="staticBackdropLabel">Edit case</h1>
+          <h1 v-else class="modal-title text-primary fs-5" id="staticBackdropLabel">Add Case</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form @submit.prevent="addCase">
 
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Enter Secret Key</label>
+              <input type="text" class="form-control" v-model="key">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Case</label>
+              <input type="text" class="form-control" v-model="case_name">
+            </div>
+            <div class="row">
+
+              <div class="col">
+                <div class="mb-3">
+                  <p class="text-primary">Plaintiff details</p>
+                  <label for="">Full Name</label>
+                  <input type="text" class="form-control" v-model="plaintiff_name">
+                  <label for="">Id Number</label>
+                  <input type="number" class="form-control" v-model="plaintiff_id">
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <p class="text-primary">Defendant details</p>
+                  <label for="">Full Name</label>
+                  <input type="text" class="form-control" v-model="defendant_name">
+                  <label for="">Id Number</label>
+                  <input type="number" class="form-control" v-model="defendant_id">
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Type of Case</label>
+              <input type="text" class="form-control" v-model="type_of_case">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Description</label>
+              <input type="text" class="form-control" v-model="description">
+            </div>
+            <div class="">
+              <button v-if="edit_id" type="submit" data-bs-dismiss="modal" class="float-end  btn btn-primary btn-block">Update</button>
+              <button v-else type="submit" data-bs-dismiss="modal" class="float-end  btn btn-primary btn-block">Add</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--end of modal-->
+
+  <!--table for showing individual cases-->
+  <div class="ps-3 table-responsive">
     <table class="table m-2 border table-hover table-bordered table-responsive">
       <tr>
         <th colspan="3" class="text-center">CASES</th>
@@ -212,21 +207,22 @@ onMounted(()=>{
         <th class="border">Defendant</th>
         <th class="border">Operations</th>
       </tr>
-        <tr v-for="cases in case_date" :key="cases">
-          <td class="border">{{ cases.id }}</td>
-          <td class="border">{{ cases.case_name }}</td>
-          <td class="border">{{ cases.plaintiff_name }}</td>
-          <td class="border">{{ cases.defendant_name }}</td>
-          <td>
-<!--           <button class="btn m-2 bg-primary" @click="editCase(cases)"  data-bs-toggle="modal" data-bs-target="#add_case">Edit</button>-->
-<!--           <button class="btn m-2 bg-primary" @click="changeStatus(cases.id)" data-bs-toggle="modal" data-bs-target="#status">Update status</button>-->
-            <router-link :to="`case_details/${cases.id}`" class="btn m-2 bg-primary">More details</router-link>
-          </td>
-        </tr>
+      <tr v-for="cases in case_date" :key="cases">
+        <td class="border">{{ cases.id }}</td>
+        <td class="border">{{ cases.case_name }}</td>
+        <td class="border">{{ cases.plaintiff_name }}</td>
+        <td class="border">{{ cases.defendant_name }}</td>
+        <td>
+          <!--           <button class="btn m-2 bg-primary" @click="editCase(cases)"  data-bs-toggle="modal" data-bs-target="#add_case">Edit</button>-->
+          <!--           <button class="btn m-2 bg-primary" @click="changeStatus(cases.id)" data-bs-toggle="modal" data-bs-target="#status">Update status</button>-->
+          <router-link :to="`case_details/${cases.id}`" class="btn m-2 bg-primary">More details</router-link>
+        </td>
+      </tr>
     </table>
+
   </div>
 </div>
-  <!-- Button trigger modal -->
+  <!-- end of table showing cases -->
 
 
   <!-- Modal -->
@@ -255,22 +251,19 @@ onMounted(()=>{
       </div>
     </div>
   </div>
- <Footer />
+
+  <Footer />
 </template>
 
 
 
 <style scoped>
-.content{
-  padding: 4px;
-  border: 1px solid grey;
-  width: 15rem;
+li:hover{
+  background-color: aqua;
+  cursor: pointer;
 }
-.content-in{
-  padding: 4px;
-  border: 1px solid grey;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
+.sidebar{
+  height: 100Vh;
+  border-right: 1px solid black;
 }
 </style>
