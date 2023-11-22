@@ -195,29 +195,33 @@ onMounted(()=>{
   <!--end of modal-->
 
   <!--table for showing individual cases-->
-  <div class="ps-3 table-responsive">
-    <table class="table m-2 border table-hover table-bordered table-responsive">
-      <tr>
-        <th colspan="3" class="text-center">CASES</th>
-      </tr>
-      <tr>
-        <th class="border">#</th>
-        <th class="border">case Name</th>
-        <th class="border">Plaintiff</th>
-        <th class="border">Defendant</th>
-        <th class="border">Operations</th>
-      </tr>
-      <tr v-for="cases in case_date" :key="cases">
+  <div class="ps-3">
+    <table class="table m-2 table-responsive table-hover table-bordered table-responsive">
+
+    <thead>
+    <tr>
+      <th colspan="5" class="border">Cases <button  class="btn btn-success float-end"  data-bs-toggle="modal" data-bs-target="#add_case" @click="clearFields" >Add<i class="bi  bi-plus"></i></button></th>
+    </tr>
+    <tr class="border">
+      <td class="border">#</td>
+      <td class="border">case Name</td>
+      <td class="border">Plaintiff</td>
+      <td class="border">Defendant</td>
+      <td class="border">Defendant</td>
+    </tr>
+    </thead>
+      <tbody>
+
+      <tr class="border" v-for="cases in case_date" :key="cases">
         <td class="border">{{ cases.id }}</td>
         <td class="border">{{ cases.case_name }}</td>
         <td class="border">{{ cases.plaintiff_name }}</td>
         <td class="border">{{ cases.defendant_name }}</td>
-        <td>
-          <!--           <button class="btn m-2 bg-primary" @click="editCase(cases)"  data-bs-toggle="modal" data-bs-target="#add_case">Edit</button>-->
-          <!--           <button class="btn m-2 bg-primary" @click="changeStatus(cases.id)" data-bs-toggle="modal" data-bs-target="#status">Update status</button>-->
-          <router-link :to="`case_details/${cases.id}`" class="btn m-2 bg-primary">More details</router-link>
-        </td>
+                <td>
+              <router-link :to="`/dashboard/admin/case_details/${cases.id}`" class="btn m-2 bg-primary">More details</router-link>
+                </td>
       </tr>
+      </tbody>
     </table>
 
   </div>
