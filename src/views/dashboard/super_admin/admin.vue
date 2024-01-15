@@ -25,7 +25,6 @@ const createAdmin =async () => {
   const res = await axios.post(base_url.value+'admin/create',formData,authHeader)
   if(res.status === 200) {
     if(res.data.status === 'success'){
-      alert('Successfully saved')
       clearFields()
     }
 
@@ -88,7 +87,8 @@ onMounted(()=>{
       </div>
 
 
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Enable body scrolling</button>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="bi bi-list-task"></i>
+    </button>
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
       <div class="offcanvas-header">

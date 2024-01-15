@@ -11,7 +11,7 @@ const {authUser,authHeader,base_url,storage} = auth()
 const enter_secret = ref(true);
 const message = ref('');
 const secret = ref('');
-const view = ref('');
+const view =ref(false);
 
 const picture = ref('');
 const description = ref('');
@@ -24,6 +24,7 @@ const evidences = ref([]);
 
 const route   =useRoute()
 const case_id = route.params.case_id
+const key_id = route.params.key_id
 
 function pictureUpload(e){
   picture.value=e.target.files[0];
@@ -77,10 +78,10 @@ const  getVideo = async () => {
 
 }
 const  getSingleCases = async () => {
-  const res = await axios.get(base_url.value + 'case/single/' + case_id + '/' + secret.value, authHeader)
+
+  const res = await axios.get(base_url.value + 'case/single/'+ case_id + '/'  + key_id + '/' + secret.value, authHeader)
   if(res.status=== 200) {
     if (res.data.status === 'failed') {
-
       enter_secret.value = true
       message.value = "res.data.message"
     }
@@ -89,7 +90,7 @@ const  getSingleCases = async () => {
       await getDocument()
       await getVideo()
 
-      view.value = 'true'
+      view.value = true
       evidences.value =res.data.data
       enter_secret.value = false
     }
@@ -193,6 +194,7 @@ onMounted(()=>{
 
     <!--    videos-->
       <div class="vid"><h2>Saved Evidences</h2>
+        {{all_videos}}
         <p>Video Evidences</p>
         <table class="table table-bordered border">
           <thead>
@@ -224,46 +226,46 @@ onMounted(()=>{
           </tbody>
         </table>
 
-        <div class="modal fade" id="viewVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">THis is video view</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <h5 class="bg-primary">Video Description</h5>
-              {{singlevideo.description}}
-              {{singlevideo.video}}
-              <video :src="'http://127.0.0.1:8000/Evidences/Videos/' + singlevideo.video" controls></video>
-            </div>
-          </div>
-        </div>
-        <div class="modal fade" id="addVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Video evidence</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <form @submit.prevent="addVideo">
-                <div class="modal-body">
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Description</label>
-                    <textarea v-model="description" class="form-control" rows="5"></textarea>
-                  </div>
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Picture</label>
-                    <input type="file" @change="videoUpload" class="form-control" >
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Add Video</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+<!--        <div class="modal fade" id="viewVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--          <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--              <div class="modal-header">-->
+<!--                <h1 class="modal-title fs-5" id="exampleModalLabel">THis is video view</h1>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--              </div>-->
+<!--              <h5 class="bg-primary">Video Description</h5>-->
+<!--              {{singlevideo.description}}-->
+<!--              {{singlevideo.video}}-->
+<!--              <video :src="'http://127.0.0.1:8000/Evidences/Videos/' + singlevideo.video" controls></video>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="modal fade" id="addVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--          <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--              <div class="modal-header">-->
+<!--                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Video evidence</h1>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--              </div>-->
+<!--              <form @submit.prevent="addVideo">-->
+<!--                <div class="modal-body">-->
+<!--                  <div class="mb-3">-->
+<!--                    <label for="exampleFormControlInput1" class="form-label">Description</label>-->
+<!--                    <textarea v-model="description" class="form-control" rows="5"></textarea>-->
+<!--                  </div>-->
+<!--                  <div class="mb-3">-->
+<!--                    <label for="exampleFormControlInput1" class="form-label">Picture</label>-->
+<!--                    <input type="file" @change="videoUpload" class="form-control" >-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--                  <button type="submit" class="btn btn-primary">Add Video</button>-->
+<!--                </div>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
 
     <!--    pictures-->
@@ -391,8 +393,6 @@ onMounted(()=>{
       </div>
     </div>
 
-
-  <Footer />
 </template>
 
 
