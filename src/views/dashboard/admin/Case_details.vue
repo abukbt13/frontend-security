@@ -32,7 +32,7 @@ function pictureUpload(e){
 
 
 const  getPicture = async () => {
-  const res = await axios.get(base_url.value + 'evidence/picture/show', authHeader)
+  const res = await axios.get(base_url.value + 'evidence/picture/show/'+case_id, authHeader)
   if(res){
     all_pictures.value = res.data.picture
   }
@@ -43,7 +43,7 @@ const addPicture =async () => {
   formData.append('picture', picture.value)
   formData.append('description', description.value)
 
-  const res = await axios.post(base_url.value+'evidence/picture/add',formData,authHeader)
+  const res = await axios.post(base_url.value+'evidence/picture/add/'+case_id,formData,authHeader)
   if(res.status === 200) {
     alert('success')
   }
