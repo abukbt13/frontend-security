@@ -22,6 +22,9 @@ const all_videos = ref([]);
 
 const evidences = ref([]);
 
+const key = ref('')
+const update_description = ref('')
+
 const route   =useRoute()
 const case_id = route.params.case_id
 const key_id = route.params.key_id
@@ -77,6 +80,7 @@ const  getVideo = async () => {
   }
 
 }
+const case_description=ref('')
 const  getSingleCases = async () => {
 
   const res = await axios.get(base_url.value + 'case/single/'+ case_id + '/'  + key_id + '/' + secret.value, authHeader)
@@ -92,6 +96,7 @@ const  getSingleCases = async () => {
 
       view.value = true
       evidences.value =res.data.data
+      update_description.value =res.data.data.description
       enter_secret.value = false
     }
   }
@@ -104,6 +109,20 @@ const  getSingleCases = async () => {
 
 function documentUpload(e){
   document.value=e.target.files[0];
+}
+const Edit_Description =async () =>{
+  const formData = new FormData();
+  formData.append('description', update_description.value)
+  formData.append('key', key.value)
+  const res = await axios.get(base_url.value + 'case/single/'+ case_id + '/'  + key_id + '/' + key.value, authHeader)
+  if (res.data.status === 'failed') {
+    message.value = res.data.message
+  }
+  else {
+    const res = await axios.post(base_url.value + 'case/update/description/'+ case_id,formData, authHeader)
+    console.log(res.data)
+  }
+
 }
 const addDocument =async () => {
   alert('')
@@ -134,7 +153,16 @@ const singlevideo = ref(null)
 function showSingleVideo(data){
   singlevideo.value = data
 }
-
+function view_single_Picture($pics){
+  picture.value = $pics.picture
+  description.value = $pics.description
+}
+const doc_document = ref('')
+const doc_description = ref('')
+function view_single_Document($docs){
+  doc_document.value = $docs.document
+  doc_description.value = $docs.description
+}
 onMounted(()=>{
   authUser()
 })
@@ -163,30 +191,37 @@ onMounted(()=>{
     </div>
   </div>
 </div>
+
   <div v-if="view" class="view m-3">
 <!--    description-->
     <div  class="description">
-     <h3 class="text-primary">Case Description</h3>
+     <h3 class="text-primary">Description</h3>
+
       <textarea class="form-control"   rows="5">{{evidences.description}}</textarea>
-      <button class="btn  mt-2 btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#editDescription">
-        <i style="color: green;" class="bi bi-pen-fill"></i>Edit description
+      <button class="btn  mt-2 btn-success"  data-bs-toggle="modal" data-bs-target="#editDescription">
+        Edit <i  class="bi bi-pen-fill"></i>
       </button>
 
       <div class="modal fade" id="editDescription" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit description of the case</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-              <textarea class="form-control"   rows="5">{{evidences.description}}</textarea>
-
-              <button type="button" class="btn btn-primary float-end mt-3">Save changes</button>
-
-            </div>
-
+            <form @submit.prevent="Edit_Description">
+              <p v-if="message">{{message}}</p>
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit description</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <textarea class="form-control" v-model="update_description" rows="5"></textarea>
+              </div>
+              <div class="mx-4">
+                <label for=""> Enter Key to complete editin</label><br>
+                <input type="text" v-model="key">
+              </div>
+             <div class="">
+               <button type="submit" class="btn btn-primary mb-4 me-4 float-end mt-3">Update</button>
+             </div>
+            </form>
           </div>
         </div>
       </div>
@@ -295,13 +330,15 @@ onMounted(()=>{
             <td>{{pics.id}}</td>
             <td>{{pics.picture}}</td>
             <td>{{pics.description}}</td>
-            <td><button class="btn btn-primary">View</button></td>
+            <td><button data-bs-toggle="modal" data-bs-target="#viewpicture" @click="view_single_Picture(pics)" class="btn btn-primary">View</button></td>
           </tr>
           <tr v-else>
             <th colspan="4"><h1>No pictures saved</h1></th>
           </tr>
           </tbody>
         </table>
+
+        //Add picture modal
         <div class="modal fade" id="addpicture" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -328,6 +365,25 @@ onMounted(()=>{
             </div>
           </div>
         </div>
+
+        //View picture modal
+        <div class="modal fade" id="viewpicture" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Picture details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+             <div class="m-2">
+               <h4 class="text-uppercase text-primary">Description</h4>
+               <textarea  rows="2" class="form-control mb-3">{{description}}</textarea>
+
+               <img :src="'http://127.0.0.1:8000/storage/Evidences/Pictures/'+picture" style="width: 100%;height: 100%">
+             </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     <!--    Documents-->
@@ -357,13 +413,13 @@ onMounted(()=>{
             <td>{{docs.id}}</td>
             <td>{{docs.document}}</td>
             <td>{{docs.description}}</td>
-            <td><button class="btn btn-primary">View</button></td>
+            <td><button data-bs-toggle="modal" data-bs-target="#viewDocument" @click="view_single_Document(docs)" class="btn btn-primary">View</button></td>
           </tr>
 
           </tbody>
         </table>
 
-        <div class="modal fade" id="addDocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div style="width: 70vw;height: 80vh;" class="modal fade" id="addDocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -386,6 +442,22 @@ onMounted(()=>{
                   <button type="submit" class="btn btn-primary">Add Document</button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="viewDocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Documents</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="m-2">
+                <textarea rows="2" class="form-control mb-2">{{doc_description}}</textarea>
+
+                <embed :src="'http://127.0.0.1:8000/storage/Evidences/documents/'+doc_document" style="width: 30rem; height: 30rem;" type="">
+             <button class="btn btn-success btn-primary float-end me-4">Edit</button>
+              </div>
             </div>
           </div>
         </div>
