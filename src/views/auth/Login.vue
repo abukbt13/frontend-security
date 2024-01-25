@@ -11,7 +11,7 @@ import {auth} from "@/compossables/auth";
 import Header from "@/views/includes/Header.vue";
 const {base_url,authHeader} = auth()
 
-
+const unique_id = ref(null)
 
 const login =async () => {
   if(email.value=='' && password.value==''){
@@ -24,16 +24,10 @@ const login =async () => {
   if(res.status=== 200) {
     if (res.data.status === 'success') {
       localStorage.setItem('token', res.data.token);
-      if(res.data.user.role === 'super_admin'){
-        await router.push('/dashboard/super_admin/');
-        // alert('admin')
-      }
-      else{
-        await router.push('dashboard/admin/');
-        // alert('Not found')
-      }
 
-      // await router.push('/');
+      const unique_id = ref(res.data.user.id);
+      await router.push('/verify/' + unique_id.value);
+
     }
     else if(res.data.status === 'failed') {
       regerror.value = res.data.message;
@@ -56,6 +50,7 @@ const login =async () => {
 
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="error text-center bg-danger text-white text-uppercase">{{regerror}}</div>
+        <div class="error text-center bg-danger text-white text-uppercase">{{unique_id}}</div>
         <h2 class="text-center text-uppercase">Login here</h2>
         <form @submit.prevent="login">
           <div class="mb-3">

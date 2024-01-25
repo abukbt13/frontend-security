@@ -7,6 +7,7 @@ import View_evidence from "@/views/dashboard/admin/View_evidence.vue";
 import Case_details from "@/views/dashboard/admin/Case_details.vue";
 import Super_admin_Dashboard from "@/views/dashboard/super_admin/Index.vue";
 import Show_admin from "@/views/dashboard/super_admin/Show_admin.vue";
+import Verify from "@/views/auth/Verify.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,14 @@ const router = createRouter({
       path: '/register',
       component : Register
     },
+    {
+      path: '/verify/:id',
+      component : Verify
+    },
+
+
+
+
     {
       path: '/dashboard/admin',
       component : Admin_Dashboard

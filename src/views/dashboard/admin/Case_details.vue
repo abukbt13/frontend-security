@@ -377,6 +377,7 @@ onMounted(()=>{
              <div class="m-2">
                <h4 class="text-uppercase text-primary">Description</h4>
                <textarea  rows="2" class="form-control mb-3">{{description}}</textarea>
+               <textarea  rows="2" class="form-control mb-3">{{picture}}</textarea>
 
                <img :src="'http://127.0.0.1:8000/storage/Evidences/Pictures/'+picture" style="width: 100%;height: 100%">
              </div>
