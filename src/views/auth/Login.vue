@@ -12,6 +12,7 @@ import Header from "@/views/includes/Header.vue";
 const {base_url,authHeader} = auth()
 
 const unique_id = ref(null)
+const regerror = ref(null)
 
 const login =async () => {
   if(email.value=='' && password.value==''){
@@ -49,7 +50,8 @@ const login =async () => {
     <div class="row px-3 d-flex justify-content-center align-items-center h-100">
 
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="error text-center bg-danger text-white text-uppercase">{{regerror}}</div>
+        <div class="error text-center bg-danger text-white text-uppercase p-2" v-if="regerror">{{regerror + ' !'}}</div>
+        <hr>
         <div class="error text-center bg-danger text-white text-uppercase">{{unique_id}}</div>
         <h2 class="text-center text-uppercase">Login here</h2>
         <form @submit.prevent="login">

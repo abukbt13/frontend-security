@@ -9,7 +9,7 @@ const route = useRoute();
 const otp = ref('')
 const id = ref('')
  id.value = route.params.id;
-const regerror = ref('')
+const status = ref('')
 
 import {auth} from "@/compossables/auth";
 import Header from "@/views/includes/Header.vue";
@@ -19,34 +19,29 @@ const {base_url,authHeader} = auth()
 
 const Verify =async () => {
   if(otp.value==''){
-    regerror.value = 'Otp is required'
+    status.value = 'Otp is required'
   }
   const formData = new FormData();
   formData.append('id', id.value)
   formData.append('otp', otp.value)
   const res = await axios.post(base_url.value+'auth/verify/'+id.value,formData)
   if(res.status=== 200) {
-    console.log(res.data.user.role)
     if (res.data.status === 'success') {
-      console.log(res.data.user.role)
       if(res.data.user.role === 'super_admin'){
         await router.push('/dashboard/super_admin/');
-        // alert('admin')
       }
       else{
         console.log(res.data.user.role)
         await router.push('/dashboard/admin/');
-        // alert('Not found')
       }
 
-      // await router.push('/');
     }
     else if(res.data.status === 'failed') {
-      regerror.value = res.data.message;
+      status.value = res.data.message;
     }
 
   }else{
-    regerror.value ="Error in network"
+    status.value ="Error in network"
   }
 
 
@@ -61,7 +56,7 @@ const Verify =async () => {
     <div class="row px-3 d-flex justify-content-center align-items-center h-100">
 
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="error text-center bg-danger text-white text-uppercase">{{regerror}}</div>
+        <div class="error text-center bg-danger text-white text-uppercase p-3" v-if="status">{{status}}</div>
         <h2 class="text-center text-uppercase">Use OTP received on your phone to proceed</h2>
         <form @submit.prevent="Verify">
           <div class="mb-3">

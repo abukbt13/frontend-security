@@ -131,8 +131,27 @@ function deactivateCAse(id){
       getCases()
     }
   });
+}
 
-
+function activateCAse(id){
+  Swal.fire({
+    title: "Are you sure you want to  activating case?",
+    text: "You won't be able to revert this!",
+    icon: "danger",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, activate it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const res =  axios.get(`${base_url.value}court/activate/${id}`, authHeader);      Swal.fire({
+        title: "Activated!",
+        text: "Case have been activated.",
+        icon: "success"
+      });
+      getCases()
+    }
+  });
 }
 
 onMounted(()=>{
@@ -250,7 +269,7 @@ onMounted(()=>{
                     <td class="border">{{ deactivated_case.plaintiff_name }}</td>
                     <td class="border">{{ deactivated_case.defendant_name }}</td>
                     <td >
-                      <button class="btn bg-secondary" @click="deactivateCAse(deactivated_case.id)">Activate</button>
+                      <button class="btn bg-secondary" @click="activateCAse(deactivated_case.id)">Activate</button>
                       <router-link :to="`/dashboard/admin/case_details/${deactivated_case.id}/${deactivated_case.key}`" class="btn m-2 bg-primary">More details</router-link>
                     </td>
                   </tr>
@@ -273,19 +292,17 @@ onMounted(()=>{
           <tr>
             <th colspan="4" class="text-uppercase text-center">All cases</th>
           </tr>
-          <tr>
+          <tr class="bg-secondary text-white text-center text-uppercase">
             <td class="border">#</td>
-            <td class="border">key</td>
             <td class="border">case Name</td>
             <td class="border">Plaintiff</td>
             <td class="border">Defendant</td>
-            <td class="border">Defendant</td>
+            <td class="border">Operations</td>
           </tr>
 
           <!-- Table Rows (Generated dynamically using Vue.js) -->
           <tr  v-for="cases in case_date" :key="cases">
             <td class="border">{{ cases.id }}</td>
-            <td class="border">{{ cases.key }}</td>
             <td class="border">{{ cases.case_name }}</td>
             <td class="border">{{ cases.plaintiff_name }}</td>
             <td class="border">{{ cases.defendant_name }}</td>

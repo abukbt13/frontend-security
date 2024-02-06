@@ -11,6 +11,7 @@ const {authUser,authHeader,base_url,storage} = auth()
 const enter_secret = ref(true);
 const message = ref('');
 const secret = ref('');
+const status = ref('');
 const view =ref(false);
 
 const picture = ref('');
@@ -47,16 +48,13 @@ const addPicture =async () => {
   formData.append('description', description.value)
 
   const res = await axios.post(base_url.value+'evidence/picture/add/'+case_id,formData,authHeader)
-  if(res.status === 200) {
-    alert('success')
+  if(res.data.status === 'success') {
+    status.value = res.data.message
+    await getPicture()
   }
-  // if(res.data.status === 'success'){
-  //   alert('Successfully Update')
-  //   clearFields()
-  //   await getCases()
-  // }
-
-
+ else {
+    status.value = 'Something went wrong try again letter'
+  }
 }
 
 const video = ref('')
@@ -68,13 +66,14 @@ const addVideo =async () => {
   formData.append('video', video.value)
   formData.append('description', description.value)
 
-  const res = await axios.post(base_url.value+'video/add',formData,authHeader)
-  if(res.status === 200) {
-    alert('success')
+  const res = await axios.post(base_url.value+'video/add/'+case_id,formData,authHeader)
+  if(res.data.status === 'success') {
+    status.value = res.data.message
+    await getVideo()
   }
 }
 const  getVideo = async () => {
-  const res = await axios.get(base_url.value + 'video/show', authHeader)
+  const res = await axios.get(base_url.value + 'video/show/'+case_id, authHeader)
   if(res){
     all_videos.value = res.data.videos
   }
@@ -125,31 +124,25 @@ const Edit_Description =async () =>{
 
 }
 const addDocument =async () => {
-  alert('')
   const formData = new FormData();
   formData.append('document', document.value)
   formData.append('description', description.value)
 
-  const res = await axios.post(base_url.value+'document/add',formData,authHeader)
-  if(res.status === 200) {
-    alert('success')
+  const res = await axios.post(base_url.value+'document/add/'+case_id,formData,authHeader)
+  if(res.data.status === 'success') {
+    status.value = res.data.message
+    await getDocument()
   }
-  // if(res.data.status === 'success'){
-  //   alert('Successfully Update')
-  //   clearFields()
-  //   await getCases()
-  // }
-
 
 }
 const  getDocument = async () => {
-  const res = await axios.get(base_url.value + 'document/show', authHeader)
+  const res = await axios.get(base_url.value + 'document/show/'+case_id, authHeader)
   if(res){
     all_docs.value = res.data.documents
   }
 
 }
-const singlevideo = ref(null)
+const singlevideo = ref([])
 function showSingleVideo(data){
   singlevideo.value = data
 }
@@ -171,6 +164,7 @@ onMounted(()=>{
 
 <template>
 <Header />
+
 <div v-show="enter_secret">
   <div  class="d-flex justify-content-center">
     <div style="width: 30rem;" class="border p-3 m-2">
@@ -191,14 +185,16 @@ onMounted(()=>{
     </div>
   </div>
 </div>
+<h3 class="p-4 bg-info text-white" v-if="status">{{status}}</h3>
 
   <div v-if="view" class="view m-3">
 <!--    description-->
+
     <div  class="description">
      <h3 class="text-primary">Description</h3>
 
       <textarea class="form-control"   rows="5">{{evidences.description}}</textarea>
-      <button class="btn  mt-2 btn-success"  data-bs-toggle="modal" data-bs-target="#editDescription">
+      <button class="btn  mt-2 btn-primary float-end"  data-bs-toggle="modal" data-bs-target="#editDescription">
         Edit <i  class="bi bi-pen-fill"></i>
       </button>
 
@@ -229,7 +225,6 @@ onMounted(()=>{
 
     <!--    videos-->
       <div class="vid"><h2>Saved Evidences</h2>
-        {{all_videos}}
         <p>Video Evidences</p>
         <table class="table table-bordered border">
           <thead>
@@ -239,7 +234,6 @@ onMounted(()=>{
               <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addVideo">
                 Add Video evidence
               </button>
-
               <!-- Modal -->
             </th>
           </tr>
@@ -255,52 +249,64 @@ onMounted(()=>{
             <td>{{videos.id}}</td>
             <td>{{videos.video}}</td>
             <td>{{videos.description}}</td>
-            <td><button class="btn btn-primary" @click="showSingleVideo(videos)" data-bs-toggle="modal" data-bs-target="#viewVideo">View</button></td>
+            <td><button class="btn btn-primary" @click="showSingleVideo(videos)" data-bs-toggle="modal" data-bs-target="#view">View</button></td>
           </tr>
 
           </tbody>
         </table>
 
-<!--        <div class="modal fade" id="viewVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--          <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--              <div class="modal-header">-->
-<!--                <h1 class="modal-title fs-5" id="exampleModalLabel">THis is video view</h1>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--              </div>-->
-<!--              <h5 class="bg-primary">Video Description</h5>-->
-<!--              {{singlevideo.description}}-->
-<!--              {{singlevideo.video}}-->
-<!--              <video :src="'http://127.0.0.1:8000/Evidences/Videos/' + singlevideo.video" controls></video>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="modal fade" id="addVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--          <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--              <div class="modal-header">-->
-<!--                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Video evidence</h1>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--              </div>-->
-<!--              <form @submit.prevent="addVideo">-->
-<!--                <div class="modal-body">-->
-<!--                  <div class="mb-3">-->
-<!--                    <label for="exampleFormControlInput1" class="form-label">Description</label>-->
-<!--                    <textarea v-model="description" class="form-control" rows="5"></textarea>-->
-<!--                  </div>-->
-<!--                  <div class="mb-3">-->
-<!--                    <label for="exampleFormControlInput1" class="form-label">Picture</label>-->
-<!--                    <input type="file" @change="videoUpload" class="form-control" >-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--                  <button type="submit" class="btn btn-primary">Add Video</button>-->
-<!--                </div>-->
-<!--              </form>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="modal fade" id="addVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Video evidence</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form @submit.prevent="addVideo">
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Description</label>
+                    <textarea v-model="description" class="form-control" rows="5"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Picture</label>
+                    <input type="file" @change="videoUpload" class="form-control" >
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Add Video</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button trigger modal -->
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  {{singlevideo}}
+                <textarea rows="2" class="form-control mb-2">{{singlevideo.description}}</textarea>
+
+                              <video :src="'http://127.0.0.1:8000/storage/Evidences/Videos/' + singlevideo.video" controls></video>
+                <button class="btn btn-success btn-primary float-end me-4">Edit</button>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     <!--    pictures-->
@@ -338,7 +344,7 @@ onMounted(()=>{
           </tbody>
         </table>
 
-        //Add picture modal
+<!--        //Add picture modal-->
         <div class="modal fade" id="addpicture" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -359,14 +365,14 @@ onMounted(()=>{
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Add Evidence</button>
+                  <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Add Picture evidence</button>
                 </div>
               </form>
             </div>
           </div>
         </div>
 
-        //View picture modal
+<!--        //View picture modal-->
         <div class="modal fade" id="viewpicture" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -440,7 +446,7 @@ onMounted(()=>{
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Add Document</button>
+                  <button type="submit"  data-bs-dismiss="modal" class="btn  btn-primary">Add Document</button>
                 </div>
               </form>
             </div>
