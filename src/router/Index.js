@@ -29,8 +29,6 @@ const router = createRouter({
       path: '/verify/:id',
       component : Verify
     },
-
-
     {
       path: '/dashboard/admin',
       component : Admin_Dashboard
