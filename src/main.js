@@ -16,16 +16,25 @@
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes: [
+        // Define your routes here
+    ]
+})
 
 const app = createApp(App)
 
-//import bootstrap
+// Import Bootstrap CSS and JavaScript
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-//import bootstrap icons
+// Import Bootstrap icons CSS
 import 'bootstrap-icons/font/bootstrap-icons.css';
+
 app.use(router)
 
 app.mount('#app')
+
