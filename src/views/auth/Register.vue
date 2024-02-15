@@ -53,7 +53,9 @@ const createAccount =async () => {
 
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="error text-center bg-danger text-white text-uppercase">{{regerror}}</div>
-        <h2 class="text-center">Register</h2>
+        <h2 class="text-center">Register here</h2>
+
+        <p>Already have an account? <router-link to="login">LOGIN</router-link></p>
         <form @submit.prevent="createAccount">
 
           <div class="mb-3">
@@ -72,7 +74,6 @@ const createAccount =async () => {
             <button type="submit" class="w-100 btn btn-primary btn-block">Register</button>
           </div>
           <br>
-          <p>Don't have an account? <router-link to="login">Click here</router-link></p>
 
         </form>
       </div>

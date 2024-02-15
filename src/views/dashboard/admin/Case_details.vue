@@ -290,11 +290,10 @@ onMounted(()=>{
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Video Evidence</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  {{singlevideo}}
                 <textarea rows="2" class="form-control mb-2">{{singlevideo.description}}</textarea>
 
                               <video :src="'http://127.0.0.1:8000/storage/Evidences/Videos/' + singlevideo.video" controls></video>

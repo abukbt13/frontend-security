@@ -247,9 +247,9 @@ onMounted(()=>{
       </div>
       <div class="offcanvas-body">
 
-        <li data-bs-toggle="modal" data-bs-target="#add_admin" class="mt-3 list-unstyled "><i class="bi  bi-plus"></i>Add cryptanalyst</li>
-        <li data-bs-toggle="modal" data-bs-target="#view_logs" class="mt-3 list-unstyled "><i class="bi  bi-eye-fill"></i>View Logs</li>
-        <li data-bs-toggle="modal" data-bs-target="#case_file" class=" mt-3 text-decoration-none" to="super_admin/show_admin"><i class="bi  bi-eye-fill"></i> Show Cases files</li>
+        <li style="padding: 1rem;cursor: progress;font-size: 18px;" data-bs-toggle="modal" data-bs-target="#add_admin" class="mt-3 bg-primary list-unstyled "><i class="bi  bi-plus"></i>Add Forensic Analyst</li>
+        <li style="padding: 1rem;cursor: progress;font-size: 18px;" data-bs-toggle="modal" data-bs-target="#view_logs" class="mt-3 bg-primary list-unstyled "><i class="bi  bi-eye-fill"></i>View Logs</li>
+        <li style="padding: 1rem;cursor: progress;font-size: 18px;" data-bs-toggle="modal" data-bs-target="#case_file" class=" mt-3 bg-primary  text-decoration-none" to="super_admin/show_admin"><i class="bi  bi-eye-fill"></i> Show Cases files</li>
         <hr>
       </div>
     </div>
