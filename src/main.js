@@ -1,15 +1,31 @@
+// import { createApp } from 'vue'
+// import App from './App.vue'
+// import router from './router'
+//
+// //bootstrap import
+// import 'bootstrap'
+// import 'bootstrap/dist/css/bootstrap.min.css'
+// import VueSweetalert2  from "sweetalert2";
+// //bootstrap icon import
+// import 'bootstrap-icons/font/bootstrap-icons.css';
+// const app = createApp(App)
+//
+// app.use(router)
+//
+// app.mount('#app')
+
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router/index.js'
+import router from './router'
 
-//bootsrap import
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import VueSweetalert2  from "sweetalert2";
-//bootstrap icon import
-import 'bootstrap-icons/font/bootstrap-icons.css';
 const app = createApp(App)
 
+//import bootstrap
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+//import bootstrap icons
+import 'bootstrap-icons/font/bootstrap-icons.css';
 app.use(router)
 
 app.mount('#app')
