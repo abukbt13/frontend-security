@@ -26,11 +26,6 @@ document.title = "home";
           <router-link to="register" style="background-color: pink;color:blue;" class="btn">Get Started</router-link>
         </div>
       </div>
-      <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="video-container">
-          <video class="video" src="video.mp4" controls></video>
-        </div>
-      </div>
     </div>
     <div class="intro bg-light text-center">
       At TopGuard Cloud, we strive to build novel software solutions to assist Criminal Investigations through <br> efficient case management, enhanced investigative workflow and utilising<br>  digital forensic intelligence.
