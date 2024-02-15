@@ -6,6 +6,7 @@ import Footer from "@/views/includes/Footer.vue";
 import {ref} from "vue";
 document.title = "home";
 
+
 </script>
 
 <template>
@@ -27,7 +28,7 @@ document.title = "home";
       </div>
       <div class="col-sm-12 col-md-6 col-lg-6">
         <div class="video-container">
-          <video class="video" src="public/video.mp4" controls></video>
+          <video class="video" src="video.mp4" controls></video>
         </div>
       </div>
     </div>
